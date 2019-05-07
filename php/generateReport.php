@@ -19,7 +19,7 @@ function Header()
     //date('d/m/Y'),0,1,'L')
     //$inicio = strftime("%A, %d de %B del %Y", strtotime($fechaComite));
     $fecha = date('d/m/Y');
-     $fecha2 = date('N');
+    $fecha2 = date('N');
      switch ($fecha2) {
          case 1:
          $fecha2 = "Lunes";
@@ -112,12 +112,13 @@ function Footer()
 }
 }
 $id;
+$nombres;
 foreach($_POST as $key=>$value){
     //echo $key, ' => ', $value, "<br/>";
     if($key == "id"){
         $id = $value;
-    }else{
-        //echo "string2";
+    }else if($key == "nombre"){
+        $nombres = $value;
     }
 }
 //echo $id;
@@ -142,9 +143,11 @@ $con =  $db->getConnection();
     mysqli_query ($con,"SET NAMES 'utf8'");
     $query = mysqli_query($con,$querieArmado) or die(mysqli_error());
 
+/////////////////////////////////////////////////////////////////
     $pdf = new PDF();
     //header
     $pdf->AddPage();
+    $pdf->Text(10, 45, utf8_decode($nombres));
     //foter page
     $pdf->AliasNbPages();
     $pdf->SetFont('Arial','B',12);

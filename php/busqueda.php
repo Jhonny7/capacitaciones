@@ -101,6 +101,7 @@ if($action == 'ajax'){
 					<form class="form-inline" method="post" 
 					action="php/generateReport.php">
 					<input type="hidden" name="id" value="<?php echo $id;?>" />
+					<input type="hidden" name="nombre" value="<?php echo $nombre;?>" />
 						<button type="submit" id="pdf" name="generate_pdf" class="botonDescarga">
 						DESCARGAR</button>
 					</form>
