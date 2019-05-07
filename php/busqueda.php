@@ -9,6 +9,7 @@ $con =  $db->getConnection();
 $action = (isset($_REQUEST['action'])&& $_REQUEST['action'] !=NULL)?$_REQUEST['action']:'';
 if($action == 'ajax'){
 	$query = mysqli_real_escape_string($con,(strip_tags($_REQUEST['query'], ENT_QUOTES)));
+	$nombre = $query;
  //print_r($con);
 	$joins = "INNER JOIN curso c ON (c.id = e.id_curso)
 			  INNER JOIN estatus es ON (es.id = e.id_estatus)
@@ -17,7 +18,9 @@ if($action == 'ajax'){
 	$campos="e.id,
 			 c.descripcion,
 			 c.vigencia,
-			 es.descripcion as estatus";
+			 es.descripcion as estatus,
+			 concat(unix_timestamp(e.fecha_alta),'-P-TG') as idCurso,
+			 concat(p.apellido_paterno,' ',p.apellido_materno,' ',p.nombre) as nombre";
 	$sWhere=" concat(p.apellido_paterno,' ',p.apellido_materno,' ',p.nombre) = '".$query."'";
 	//$sWhere=" concat(p.apellido_paterno,' ',p.apellido_materno,' ',p.nombre) = 'LOPEZ SARRELANGUE JUAN'";
 	
@@ -54,21 +57,24 @@ if($action == 'ajax'){
 	mysqli_close($con); 
 
 	?>
-		<div class="contenedorTabla">      	
+		
+	<?php
+
+	if ($numrows>0){
+	?>
+	<div style="width: 100%;font-size: 110%;font-weight: 300; text-align: center;margin-top: 2%;
+    margin-bottom: 3%;">Resultados obtenidos para <strong><?php echo $nombre;?></strong></div>
+	<div class="contenedorTabla">      	
 			<table class="tabla">
 	            <thead class="thead">
 					<tr>
 						<th class='titulos'>Curso</th>
 						<th class='titulos'>Vigencia </th>
-						<th class='titulos'>Estatus </th>
+						<th class='titulos'>Calificación </th>
+						<th class='titulos'>No. Acreditación </th>
 						<th class='titulos'></th>
 					</tr>
 				</thead>
-	<?php
-
-	if ($numrows>0){
-		
-	?>
 		<tbody>
 			<?php 
 			while($row = mysqli_fetch_array($query)){
@@ -78,6 +84,7 @@ if($action == 'ajax'){
 				$descripcion= $row['descripcion'];
 				$vigencia=$row['vigencia'];
 				$estatus=$row['estatus'];
+				$idCurso=$row['idCurso'];
 				/*$id="";
 				$descripcion="";
 				$vigencia="";
@@ -89,6 +96,7 @@ if($action == 'ajax'){
 				<th class='titulos'><?php echo $descripcion;?></th>
 				<th class='titulos'><?php echo $vigencia;?></th>
 				<th class='titulos'><?php echo $estatus;?></th>
+				<th class='titulos'><?php echo $idCurso;?></th>
 				<th class='titulos descarga' style="width: 1%;">
 					<form class="form-inline" method="post" 
 					action="php/generateReport.php">
@@ -105,6 +113,17 @@ if($action == 'ajax'){
 	<?php	
 	}else{
 		?>
+		<div class="contenedorTabla">      	
+			<table class="tabla">
+	            <thead class="thead">
+					<tr>
+						<th class='titulos'>Curso</th>
+						<th class='titulos'>Vigencia </th>
+						<th class='titulos'>Calificación </th>
+						<th class='titulos'>No. Acreditación </th>
+						<th class='titulos'></th>
+					</tr>
+				</thead>
 		<tbody>
 			<tr>
 				<th class='titulos' style="text-align: inherit;">No se encontraron registros.</th>

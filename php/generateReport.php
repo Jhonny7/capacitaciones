@@ -22,30 +22,31 @@ function Header()
      $fecha2 = date('N');
      switch ($fecha2) {
          case 1:
-         $fecha2 = "Domingo";
-             break;
-             case 2:
          $fecha2 = "Lunes";
              break;
-             case 3:
+             case 2:
          $fecha2 = "Martes";
              break;
-             case 4:
+             case 3:
          $fecha2 = utf8_decode("Miércoles");
              break;
-             case 5:
+             case 4:
          $fecha2 = "Jueves";
              break;
-             case 6:
+             case 5:
          $fecha2 = "Viernes";
              break;
-             case 7:
+             case 6:
          $fecha2 = utf8_decode("Sábado");
+             break;
+             case 7:
+         $fecha2 = "Domingo";
              break;
      }
     $date = explode('/', $fecha);
-    $month = intval($date[0]);
+    //$month = intval($date[0]);
 
+    $month = intval(date('m'));
     switch ($month) {
     case 1:
         $month = "Enero";
@@ -88,11 +89,15 @@ function Header()
     $day   = intval($date[1]);
     $year  = intval($date[2]);
     $this->Text(140, 25, $fecha2." ". $day." de ".$month." de ".$year);
+
+    //Personal capacitado por Corporativo de Servicios Industriales y Consultoria ( CSIyC ).
+
+    $this->Text(40, 37, utf8_decode("Personal capacitado por PEZ Adiestramiento y Capacitación"));
     //$this->Text(160, 25, date('d/m/Y'),0,1,'L'));
     //$this->SetXY(200, 25); // position of text2
     //$this->Cell(80,10,,1,0,'C');
     // Line break
-    $this->Ln(20);
+    $this->Ln(40);
 }
 
 // Page footer
@@ -103,7 +108,7 @@ function Footer()
     // Arial italic 8
     $this->SetFont('Arial','I',8);
     // Page number
-    $this->Cell(0,10,'Página '.$this->PageNo().'/{nb}',0,0,'C');
+    $this->Cell(0,10,utf8_decode('Página ').$this->PageNo().'/{nb}',0,0,'C');
 }
 }
 $id;
@@ -127,7 +132,9 @@ $con =  $db->getConnection();
     $campos="e.id,
              c.descripcion,
              c.vigencia,
-             es.descripcion as estatus";
+             es.descripcion as estatus,
+             concat(unix_timestamp(e.fecha_alta),'-P-TG') as idCurso,
+             concat(p.apellido_paterno,' ',p.apellido_materno,' ',p.nombre) as nombre";
     //$sWhere=" concat(p.apellido_paterno,' ',p.apellido_materno,' ',p.nombre) = '".$query."'";
     $sWhere=" e.id = ".$query;
 
@@ -147,19 +154,30 @@ $con =  $db->getConnection();
     //$pdf->Cell(145, 20, 'LETRERO', 1, 0, 'C', True); // en orden lo que informan estos parametros es: 
     
 
-    $pdf->Cell(40,12,"Curso",1,0,'C',true);
-    $pdf->Cell(40,12,"Vigencia",1);
-    $pdf->Cell(40,12,"Estatus",1);
+    $pdf->Cell(70,12,"Curso",1,0,'C',true);
+    $pdf->SetTextColor(255,255,255);  // Establece el color del texto (en este caso es blanco) 
+    $pdf->SetFillColor(8,151,250); 
+    $pdf->Cell(40,12,"Vigencia",1,0,'C',true);
+    $pdf->SetTextColor(255,255,255);  // Establece el color del texto (en este caso es blanco) 
+    $pdf->SetFillColor(8,151,250); 
+    $pdf->Cell(40,12,utf8_decode ("Calificación"),1,0,'C',true);
+    $pdf->SetTextColor(255,255,255);  // Establece el color del texto (en este caso es blanco) 
+    $pdf->SetFillColor(8,151,250); 
+    $pdf->Cell(40,12,utf8_decode ("No. Acreditación"),1,0,'C',true);
 
     while($row = mysqli_fetch_array($query)){
         $id=$row['id'];
-                $descripcion= utf8_decode ($row['descripcion']);
-                $vigencia= utf8_decode ($row['vigencia']);
-                $estatus= utf8_decode ($row['estatus']);
+        $descripcion= utf8_decode ($row['descripcion']);
+        $vigencia= utf8_decode ($row['vigencia']);
+        $estatus= utf8_decode ($row['estatus']);
+        $idCurso= utf8_decode ($row['idCurso']);
+
         $pdf->Ln();
-        $pdf->Cell(40,12,$descripcion,1);
+        $pdf->SetTextColor(0,0,0);
+        $pdf->Cell(70,12,$descripcion,1);
         $pdf->Cell(40,12,$vigencia,1);
         $pdf->Cell(40,12,$estatus,1);
+        $pdf->Cell(40,12,$idCurso,1);
     }
 
     $pdf->Output("Reporte ".$descripcion.".pdf","D");
