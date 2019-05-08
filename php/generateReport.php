@@ -47,7 +47,7 @@ function Header()
     //$month = intval($date[0]);
 
     $month = intval(date('m'));
-    switch ($month) {
+  switch ($month) {
     case 1:
         $month = "Enero";
         break;
@@ -57,34 +57,34 @@ function Header()
     case 3:
         $month = "Marzo";
         break;
-        case 4:
+    case 4:
         $month = "Abril";
         break;
-        case 5:
+    case 5:
         $month = "Mayo";
         break;
-        case 6:
+    case 6:
         $month = "Junio";
         break;
-        case 7:
+    case 7:
         $month = "Julio";
         break;
-        case 8:
+    case 8:
         $month = "Agosto";
         break;
-        case 9:
+    case 9:
         $month = "Septiembre";
         break;
-        case 10:
+    case 10:
         $month = "Octubre";
         break;
-        case 11:
+    case 11:
         $month = "Noviembre";
         break;
-        case 12:
+    case 12:
         $month = "Diciembre";
         break;
-}
+  }
 
     $day   = intval($date[1]);
     $year  = intval($date[2]);
@@ -103,10 +103,35 @@ function Header()
 // Page footer
 function Footer()
 {
+  /*Imagen footer*/
+    //$this->Image('../css/images/qr.jpeg',10,-25,50);
+    
     // Position at 1.5 cm from bottom
     $this->SetY(-15);
+    
+    //$this->SetTextColor(255,255,255);
+    //$this->Cell(170,$this->GetY()-60,"CURSO VALIDADO POR Pez Capacitación Integral INSTRUCTOR EXTERNO Ing. Juan J. Buda G. Reg. STPS-BUGJ7503039B4-0005 Reg. CONOCER: 07976816 Validación de Participante en: www.capacitacionintegralpez.com E-Mail: ventas@capacitacionintegralpez.com",1,0,'C',true);
+    
     // Arial italic 8
     $this->SetFont('Arial','I',8);
+    //$this->Cell(70,12,"CURSO VALIDADO POR Pez Capacitación Integral INSTRUCTOR EXTERNO Ing. Juan J. Buda G. Reg. STPS-BUGJ7503039B4-0005 Reg. CONOCER: 07976816 Validación de Participante en: www.capacitacionintegralpez.com E-Mail: ventas@capacitacionintegralpez.com",1,0,'C',true);
+    //$this->Text(10, 45, utf8_decode("CURSO VALIDADO POR Pez Capacitación Integral INSTRUCTOR EXTERNO Ing. Juan J. Buda G. Reg. STPS-BUGJ7503039B4-0005 Reg. CONOCER: 07976816 Validación de Participante en: www.capacitacionintegralpez.com E-Mail: ventas@capacitacionintegralpez.com"));
+    //$this->drawTextBox('This sentence is centered in the middle of the box.', 50, 50, 'C', 'M');
+    //$this->WriteHTML($html);
+    $texto = "CURSO VALIDADO POR Pez Capacitación Integral INSTRUCTOR EXTERNO"; 
+    $texto2 = "Ing. Juan J. Buda G. Reg. STPS-BUGJ7503039B4-0005 Reg. CONOCER: 07976816 Validación de Participante en: ";
+    $texto3 = "www.capacitacionintegralpez.com E-Mail: ventas@capacitacionintegralpez.com";
+    $this->SetDrawColor(0,0,0);
+    $this->Rect(10, $this->GetY()-40, 190, 33);
+    $this->SetDrawColor(0,0,0);
+    $this->Image('../css/images/qr.jpeg', 15, $this->GetY()-39, 30);
+    $nuevoY = 8;
+    $this->Text(48, $this->GetY()-28+$nuevoY, utf8_decode($texto));
+    $this->Text(48, $this->GetY()-24+$nuevoY, utf8_decode($texto2));
+    $this->Text(48, $this->GetY()-20+$nuevoY, utf8_decode($texto3));
+    
+    //$this->Multicell(165,28,"This is a multi-line text string\nNew line\nNew line")
+//$this->Text(55, 75, utf8_decode('FUNCIONARIO(A) RECEPTOR'));
     // Page number
     $this->Cell(0,10,utf8_decode('Página ').$this->PageNo().'/{nb}',0,0,'C');
 }
